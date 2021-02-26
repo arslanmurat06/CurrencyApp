@@ -1,4 +1,30 @@
 import 'package:currencygamestock/Domain/model/currency.dart';
+import 'package:currencygamestock/Domain/model/user.dart';
+import 'package:currencygamestock/Domain/model/userInvest.dart';
+import 'package:currencygamestock/Domain/model/userWallet.dart';
+
+User getMoqUser() {
+  List<UserInvest> userInvestList = [
+    new UserInvest(currency: MoqCurrencies[1], currencyAmount: 376.9),
+    new UserInvest(currency: MoqCurrencies[2], currencyAmount: 45),
+    new UserInvest(currency: MoqCurrencies[3], currencyAmount: 34),
+    new UserInvest(currency: MoqCurrencies[4], currencyAmount: 345),
+    new UserInvest(currency: MoqCurrencies[5], currencyAmount: 53),
+    new UserInvest(currency: MoqCurrencies[6], currencyAmount: 66),
+    new UserInvest(currency: MoqCurrencies[7], currencyAmount: 34),
+    new UserInvest(currency: MoqCurrencies[8], currencyAmount: 23),
+    new UserInvest(currency: MoqCurrencies[9], currencyAmount: 56),
+    new UserInvest(currency: MoqCurrencies[10], currencyAmount: 77),
+    new UserInvest(currency: MoqCurrencies[11], currencyAmount: 32),
+    new UserInvest(currency: MoqCurrencies[12], currencyAmount: 46),
+  ];
+
+  return new User(
+      balance: 1000000,
+      name: "Cem",
+      surname: "Zengin",
+      wallet: new UserWallet(investList: userInvestList));
+}
 
 List<Currency> MoqCurrencies = [
   new Currency(

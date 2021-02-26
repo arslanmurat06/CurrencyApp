@@ -1,5 +1,3 @@
-import 'package:currencygamestock/UI/_pages/sellBuy.dart';
-import 'package:currencygamestock/UI/_pages/walletPage.dart';
 import 'package:currencygamestock/UI/_widgets/currencyList.dart';
 import 'package:flutter/material.dart';
 

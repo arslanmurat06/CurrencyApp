@@ -1,7 +1,9 @@
+import 'package:currencygamestock/Data/moqData.dart';
+import 'package:currencygamestock/Providers/userProvider.dart';
 import 'package:currencygamestock/UI/_pages/currencyPage.dart';
-import 'package:currencygamestock/UI/_pages/sellBuy.dart';
+import 'package:currencygamestock/UI/_pages/sellBuyPage.dart';
 import 'package:currencygamestock/UI/_pages/walletPage.dart';
-import 'package:currencygamestock/UI/_widgets/currencyList.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,6 +12,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<UserData>(context, listen: false).setUser(getMoqUser());
+  }
+
   int _selectedIndex = 0;
 
   GlobalKey _bottomNavigationKey = GlobalKey();
@@ -35,13 +44,13 @@ class _HomePageState extends State<HomePage> {
   Theme _buildBottomNavigation(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
-          canvasColor: Colors.green[900],
+          canvasColor: Colors.black,
           textTheme: Theme.of(context)
               .textTheme
-              .copyWith(caption: new TextStyle(color: Colors.yellow))),
+              .copyWith(caption: new TextStyle(color: Colors.white54))),
       child: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        backgroundColor: Colors.blue[800],
+        backgroundColor: Colors.black12,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.monetization_on, size: 30, color: Colors.white),
