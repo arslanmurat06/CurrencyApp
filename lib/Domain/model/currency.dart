@@ -16,9 +16,5 @@ class Currency {
       this.buyPrice,
       this.changed = false,
       this.increased = false,
-      this.percentage})
-      : assert(name != null),
-        assert(description != null),
-        assert(sellPrice != null),
-        assert(buyPrice != null);
+      this.percentage});
 }

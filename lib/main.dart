@@ -1,6 +1,7 @@
 import 'package:currencygamestock/Providers/userProvider.dart';
 import 'package:currencygamestock/UI/_pages/currencyPage.dart';
 import 'package:currencygamestock/UI/_pages/homePage.dart';
+import 'package:currencygamestock/UI/_pages/walletDetaillPage.dart';
 import 'package:currencygamestock/UI/_pages/walletPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,8 @@ class MyApp extends StatelessWidget {
               new SellBuyPage(),
           NavigationRoute.CURRENCY_PAGE: (BuildContext context) =>
               new CurrencyPage(),
+          NavigationRoute.WALLETDETAIL_PAGE: (BuildContext context) =>
+              new WalletDetailPage(),
         },
       ),
     );

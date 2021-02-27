@@ -24,11 +24,7 @@ class MoqCurrencyStreamService {
     var rnd = Random();
     var rndIndex = rnd.nextInt(moqCurrencies.length - 1);
 
-    print("Index" + rndIndex.toString());
-
     var additionRate = _generateRandomCurrencyAddtionalValue();
-    var cur = moqCurrencies[rndIndex];
-    print(cur.name);
     print("addition:" + additionRate.toString());
     return new CurrencyStream(
         buyPrice: double.parse(moqCurrencies[rndIndex].buyPrice) + additionRate,

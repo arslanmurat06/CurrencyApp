@@ -15,19 +15,8 @@ class CurrenciesData extends ChangeNotifier {
     return _currencies.length;
   }
 
-  void updateItem(String currencyName, String buyPrice, String sellPrice) {
-    var currency = _currencies.firstWhere((c) => c.name == currencyName);
-
-    currency.percentage = _calculatePercentage(
-            double.parse(currency.buyPrice), double.parse(buyPrice))
-        .toStringAsFixed(6);
-    currency.changed = true;
-
-    currency.increased =
-        double.parse(buyPrice) > double.parse(currency.buyPrice);
-
-    currency.buyPrice = buyPrice;
-    notifyListeners();
+  Currency getCurrecyByName(String curencyName) {
+    return _currencies.firstWhere((c) => c.name == curencyName);
   }
 
   void updateCurrency(CurrencyStream stream) {
@@ -47,11 +36,10 @@ class CurrenciesData extends ChangeNotifier {
   }
 
   double _calculatePercentage(double oldValue, double newValue) {
-    var a = (newValue - oldValue) / (oldValue) * 100;
-    print("percentage " + a.toString());
-    return a;
+    return (newValue - oldValue) / (oldValue) * 100;
   }
 
   Currency getByIndex(int index) => _currencies[index];
   int getLenght() => _currencies.length;
+  get getCurrencies => _currencies;
 }

@@ -6,6 +6,8 @@ import 'package:currencygamestock/Domain/model/userWallet.dart';
 User getMoqUser() {
   List<UserInvest> userInvestList = [
     new UserInvest(currency: MoqCurrencies[1], currencyAmount: 376.9),
+    new UserInvest(currency: MoqCurrencies[1], currencyAmount: 345),
+    new UserInvest(currency: MoqCurrencies[2], currencyAmount: 37),
     new UserInvest(currency: MoqCurrencies[2], currencyAmount: 45),
     new UserInvest(currency: MoqCurrencies[3], currencyAmount: 34),
     new UserInvest(currency: MoqCurrencies[4], currencyAmount: 345),

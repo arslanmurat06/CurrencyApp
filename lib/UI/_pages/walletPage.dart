@@ -1,6 +1,8 @@
 import 'package:currencygamestock/Data/moqData.dart';
 import 'package:currencygamestock/Domain/model/user.dart';
+import 'package:currencygamestock/Domain/model/userInvest.dart';
 import 'package:currencygamestock/Providers/userProvider.dart';
+import 'package:currencygamestock/UI/_pages/walletDetaillPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,12 +14,13 @@ class WalletPage extends StatefulWidget {
 class _WalletPageState extends State<WalletPage> {
   UserData _userData = null;
   User _user = null;
+  List<UserInvest> _groupedUserInvestList = [];
 
   @override
   Widget build(BuildContext context) {
     _userData = Provider.of<UserData>(context);
     _user = _userData.getUser();
-
+    _groupedUserInvestList = _userData.getGroupedInvest();
     var contHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         body: SafeArea(
@@ -100,28 +103,37 @@ class _WalletPageState extends State<WalletPage> {
                       child: Text("Henüz bir yatırımımınız bulunmamakta."),
                     )
                   : ListView.builder(
-                      itemCount: _user.wallet.investList.length,
-                      itemBuilder: (context, index) => ListTile(
-                          title: Text(
-                            _user.wallet.investList[index].currency.name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(_user
-                                  .wallet.investList[index].currencyAmount
-                                  .toString() +
-                              " " +
-                              _user.wallet.investList[index].currency.name),
-                          trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(_user
-                                        .wallet.investList[index].getInvestment
-                                        .toStringAsFixed(2) +
-                                    " ₺"),
-                                Text(_user.wallet.investList[index].currency
-                                        .buyPrice +
-                                    " Alış"),
-                              ])),
+                      itemCount: _groupedUserInvestList.length,
+                      itemBuilder: (context, index) => InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WalletDetailPage(
+                                      currencyName:
+                                          _groupedUserInvestList[index]
+                                              .currency
+                                              .name)));
+                        },
+                        child: ListTile(
+                            title: Text(
+                              _groupedUserInvestList[index].currency.name,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(_groupedUserInvestList[index]
+                                    .currencyAmount
+                                    .toString() +
+                                " " +
+                                _user.wallet.investList[index].currency.name),
+                            trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(_groupedUserInvestList[index]
+                                          .totalInvest
+                                          .toStringAsFixed(2) +
+                                      " ₺"),
+                                ])),
+                      ),
                     ))
         ],
       ),

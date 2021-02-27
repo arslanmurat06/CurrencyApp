@@ -65,7 +65,6 @@ class _HomePageState extends State<HomePage> {
               label: "Al/Sat"),
         ],
         onTap: (index) {
-          print(index);
           _selectedIndex = index;
           _selectPage(index);
         },
@@ -83,15 +82,6 @@ class _HomePageState extends State<HomePage> {
     return AppBar(
       backgroundColor: Colors.black12,
       title: Text(_selectedPageTitle[_selectedPageIndex]),
-      // actions: [
-      //   IconButton(
-      //     icon: Icon(
-      //       Icons.search,
-      //       size: 25,
-      //     ),
-      //     onPressed: () {},
-      //   ),
-      // ],
     );
   }
 

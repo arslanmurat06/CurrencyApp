@@ -3,4 +3,5 @@ class NavigationRoute {
   static const SELLBUY_PAGE = "../UI/_pages/SellBuyPage";
   static const WALLET_PAGE = "../UI/_pages/WalletPage";
   static const CURRENCY_PAGE = "../UI/_pages/CurrencyPage";
+  static const WALLETDETAIL_PAGE = "../UI/_pages/WalletDetailPage";
 }
