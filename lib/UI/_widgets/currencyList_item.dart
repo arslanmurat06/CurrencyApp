@@ -86,7 +86,10 @@ class _CurrencyListItemState extends State<CurrencyListItem> {
       duration: Duration(milliseconds: 500),
       decoration: BoxDecoration(color: color),
       child: Center(
-        child: Text(string, style: TextStyle(fontSize: 16)),
+        child: InkWell(
+          child: Text(string, style: TextStyle(fontSize: 16)),
+          onTap: () {},
+        ),
       ),
     );
   }

@@ -14,7 +14,6 @@ class _CurrencyPageState extends State<CurrencyPage> {
         _buildHeader(),
         Expanded(flex: 11, child: CurrencyList())
       ]),
-      drawer: _buildCustomDrawer(),
     );
   }
 
@@ -44,77 +43,5 @@ class _CurrencyPageState extends State<CurrencyPage> {
                     child: Text("Satış", style: TextStyle(fontSize: 18))))
           ],
         ));
-  }
-
-  _buildCustomDrawer() {
-    return Drawer(
-        child: SafeArea(
-      child: Container(
-          color: Theme.of(context).primaryColor,
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 60, 16, 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    "GameStock Currency",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              color: Colors.grey,
-              height: 0.5,
-            ),
-            Expanded(
-              child: Container(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildGesture(() {
-                        print("Yasal  clicked");
-                      }, "Yasal Sözleşme", Icon(Icons.assignment)),
-                      _buildGesture(() {
-                        print("Bilgilendirme clicked");
-                      }, "Bilgilendirme", Icon(Icons.info)),
-                      _buildGesture(() {
-                        print("Duyurular clicked");
-                      }, "Duyurular/Haberler", Icon(Icons.announcement)),
-                      _buildGesture(() {
-                        print("Scoreboard clicked");
-                      }, "Scoreboard", Icon(Icons.score)),
-                      _buildGesture(() {
-                        print("Hesap kapatma clicked");
-                      },
-                          "Hesap Kapatma",
-                          Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          )),
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ])),
-    ));
-  }
-
-  Widget _buildGesture(Function goToPage, String text, Icon customIcon) {
-    return GestureDetector(
-      child: ListTile(
-          title: Text(
-            text,
-            style: TextStyle(color: Colors.white),
-          ),
-          leading: customIcon),
-      onTap: goToPage,
-    );
   }
 }

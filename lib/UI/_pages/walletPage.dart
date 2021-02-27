@@ -10,11 +10,13 @@ class WalletPage extends StatefulWidget {
 }
 
 class _WalletPageState extends State<WalletPage> {
+  UserData _userData = null;
   User _user = null;
 
   @override
   Widget build(BuildContext context) {
-    _user = Provider.of<UserData>(context).getUser();
+    _userData = Provider.of<UserData>(context);
+    _user = _userData.getUser();
 
     var contHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -41,24 +43,54 @@ class _WalletPageState extends State<WalletPage> {
                 Expanded(
                   flex: 3,
                   child: Center(
-                    child: Text(_user.name + " " + _user.surname,
+                    child: Text(
+                        _userData.getUser().name +
+                            " " +
+                            _userData.getUser().surname,
                         style: TextStyle(fontSize: 30)),
                   ),
                 ),
                 Expanded(
-                    flex: 1,
+                    flex: 3,
                     child: Center(
-                        child: Text(
-                      "Bakiyeniz",
-                      style: TextStyle(fontSize: 25),
-                    ))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Toplam Bakiyeniz:",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            _user.balance.toStringAsFixed(2) + " ₺",
+                            style: TextStyle(fontSize: 35),
+                          )
+                        ],
+                      ),
+                    )),
                 Expanded(
                     flex: 3,
                     child: Center(
-                        child: Text(
-                      _user.balance.toStringAsFixed(2) + " TL",
-                      style: TextStyle(fontSize: 35),
-                    ))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Kalan Bakiyeniz:",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            _userData.getRemainedBalance.toStringAsFixed(2) +
+                                " ₺",
+                            style: TextStyle(fontSize: 35),
+                          )
+                        ],
+                      ),
+                    )),
               ],
             ),
           ),
@@ -85,7 +117,7 @@ class _WalletPageState extends State<WalletPage> {
                                 Text(_user
                                         .wallet.investList[index].getInvestment
                                         .toStringAsFixed(2) +
-                                    " TL"),
+                                    " ₺"),
                                 Text(_user.wallet.investList[index].currency
                                         .buyPrice +
                                     " Alış"),

@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 class UserData extends ChangeNotifier {
   User _user = null;
+  double _allInvest = 0.0;
+  String _currentBalance = "";
+  double remainedBalance = 0.0;
 
   setUser(User user) {
     _user = user;
@@ -24,4 +27,24 @@ class UserData extends ChangeNotifier {
     print("user called" + _user.name);
     return this._user;
   }
+
+  double _getAllInvest() {
+    _allInvest = 0;
+    _user.wallet.investList
+        .forEach((i) => _calculateAllInvest(i.getInvestment));
+
+    return _allInvest;
+  }
+
+  double _calculateAllInvest(double invest) {
+    _allInvest = _allInvest + invest;
+  }
+
+  double calculateRemainedBalance() {
+    remainedBalance = 0.0;
+    remainedBalance = _user.balance - _getAllInvest();
+    return remainedBalance;
+  }
+
+  get getRemainedBalance => calculateRemainedBalance();
 }

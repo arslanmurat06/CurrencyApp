@@ -20,7 +20,7 @@ User getMoqUser() {
   ];
 
   return new User(
-      balance: 1000000,
+      balance: 100000,
       name: "Cem",
       surname: "Zengin",
       wallet: new UserWallet(investList: userInvestList));
