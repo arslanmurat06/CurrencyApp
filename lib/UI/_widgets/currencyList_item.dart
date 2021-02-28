@@ -1,5 +1,6 @@
 import 'package:currencygamestock/Data/moqCurrencyStream.dart';
 import 'package:currencygamestock/Domain/model/currency.dart';
+import 'package:currencygamestock/UI/_pages/sellBuyPage.dart';
 import 'package:flutter/material.dart';
 
 class CurrencyListItem extends StatefulWidget {
@@ -27,68 +28,92 @@ class _CurrencyListItemState extends State<CurrencyListItem> {
     });
 
     return Material(
-      child: InkWell(
-        onTap: () {},
-        child: Container(
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(color: Colors.black),
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Colors.black),
+          ),
+        ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Text(widget.currency.name, style: TextStyle(fontSize: 14)),
             ),
-          ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child:
-                    Text(widget.currency.name, style: TextStyle(fontSize: 14)),
+            Expanded(
+              flex: 2,
+              child: !widget.currency.increased
+                  ? Icon(
+                      Icons.arrow_downward,
+                      color: Colors.red,
+                    )
+                  : Icon(
+                      Icons.arrow_upward,
+                      color: Colors.green,
+                    ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black54),
+                    borderRadius: BorderRadius.all(Radius.circular(3))),
+                child: _getAnimatedContainer(
+                    widget.currency.buyPrice.toString(),
+                    widget.currency.name,
+                    false),
               ),
-              Expanded(
-                flex: 2,
-                child: !widget.currency.increased
-                    ? Icon(
-                        Icons.arrow_downward,
-                        color: Colors.red,
-                      )
-                    : Icon(
-                        Icons.arrow_upward,
-                        color: Colors.green,
-                      ),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            Expanded(
+              flex: 3,
+              child: Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black87),
+                    borderRadius: BorderRadius.all(Radius.circular(3))),
+                child: _getAnimatedContainer(
+                    widget.currency.sellPrice.toString(),
+                    widget.currency.name,
+                    true),
               ),
-              Expanded(
-                flex: 3,
-                child:
-                    _getAnimatedContainer(widget.currency.buyPrice.toString()),
-              ),
-              SizedBox(
-                width: 12,
-              ),
-              Expanded(
-                flex: 3,
-                child:
-                    _getAnimatedContainer(widget.currency.sellPrice.toString()),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
   }
 
-  Widget _getAnimatedContainer(String string) {
-    return AnimatedContainer(
-      onEnd: () {
-        setState(() {
-          this.color = Colors.blue;
-          widget.currency.changed = false;
-        });
+  Widget _getAnimatedContainer(
+      String currencyPrice, String currencyName, bool isSell) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SellBuyPage(
+                      currencyPrice: currencyPrice,
+                      currencyName: currencyName,
+                      isSell: isSell,
+                    )));
       },
-      duration: Duration(milliseconds: 500),
-      decoration: BoxDecoration(color: color),
-      child: Center(
-        child: InkWell(
-          child: Text(string, style: TextStyle(fontSize: 16)),
-          onTap: () {},
+      child: AnimatedContainer(
+        onEnd: () {
+          setState(() {
+            this.color = Colors.blue;
+            widget.currency.changed = false;
+          });
+        },
+        duration: Duration(milliseconds: 500),
+        decoration: BoxDecoration(color: color),
+        child: Center(
+          child: Text(currencyPrice, style: TextStyle(fontSize: 16)),
         ),
       ),
     );

@@ -22,12 +22,11 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   GlobalKey _bottomNavigationKey = GlobalKey();
-  final List<Widget> _pages = [CurrencyPage(), WalletPage(), SellBuyPage()];
+  final List<Widget> _pages = [CurrencyPage(), WalletPage()];
 
   final List<String> _selectedPageTitle = [
     "GameStock Currency",
     "Cüzdanım",
-    "Al/Sat",
   ];
   int _selectedPageIndex = 0;
 
@@ -59,12 +58,9 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.wallet_giftcard_outlined,
                   size: 30, color: Colors.white),
               label: "Cüzdan"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.clean_hands_outlined,
-                  size: 30, color: Colors.white),
-              label: "Al/Sat"),
         ],
         onTap: (index) {
+          print(index);
           _selectedIndex = index;
           _selectPage(index);
         },

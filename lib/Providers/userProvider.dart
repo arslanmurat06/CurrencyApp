@@ -5,9 +5,10 @@ import 'package:currencygamestock/Providers/currenciesProvider.dart';
 import 'package:flutter/material.dart';
 
 class UserData extends ChangeNotifier {
-  User _user = null;
+  User _user;
   double _allInvest = 0.0;
   double remainedBalance = 0.0;
+  List<UserInvest> _groupedUserInvest;
 
   setUser(User user) {
     _user = user;
@@ -48,14 +49,14 @@ class UserData extends ChangeNotifier {
   get getRemainedBalance => calculateRemainedBalance();
 
   List<UserInvest> getGroupedInvest() {
-    List<UserInvest> _userInvestList = [];
+    _groupedUserInvest = [];
 
     var groupedInvests = groupBy(
         _user.wallet.investList, (i) => (i as UserInvest).currency.name);
 
-    groupedInvests.forEach((k, v) => groupallInvest(k, v, _userInvestList));
+    groupedInvests.forEach((k, v) => _groupallInvest(k, v, _groupedUserInvest));
 
-    return _userInvestList;
+    return _groupedUserInvest;
   }
 
   List<UserInvest> getSpecificInvestList(String currencyName) {
@@ -64,7 +65,17 @@ class UserData extends ChangeNotifier {
         .toList();
   }
 
-  groupallInvest(String k, List<UserInvest> v, List<UserInvest> _investList) {
+  UserInvest getSpecificGroupedInvest(String currencyName) {
+    var a =
+        _groupedUserInvest.firstWhere((i) => i.currency.name == currencyName);
+    print("totalInvest" +
+        a.totalInvest.toStringAsFixed(3) +
+        " adı:" +
+        a.currency.name);
+    return a;
+  }
+
+  _groupallInvest(String k, List<UserInvest> v, List<UserInvest> _investList) {
     String name = "";
     double currencyAmount = 0.0;
     double totalInvest = 0.0;

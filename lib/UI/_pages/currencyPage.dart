@@ -34,13 +34,13 @@ class _CurrencyPageState extends State<CurrencyPage> {
                 flex: 3,
                 child: Center(
                     child: Text(
-                  "Alış",
+                  "Al",
                   style: TextStyle(fontSize: 18),
                 ))),
             Expanded(
                 flex: 3,
-                child: Center(
-                    child: Text("Satış", style: TextStyle(fontSize: 18))))
+                child:
+                    Center(child: Text("Sat", style: TextStyle(fontSize: 18))))
           ],
         ));
   }
