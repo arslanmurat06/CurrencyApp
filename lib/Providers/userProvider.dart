@@ -20,7 +20,18 @@ class UserData extends ChangeNotifier {
   }
 
   removeUserWallet(UserInvest invest) {
-    _user.wallet.investList.removeWhere((i) => i.id == invest.id);
+    print("remove geldi" +
+        invest.currency.name +
+        "miktar " +
+        invest.currencyAmount.toString());
+    var willbeRemovedInvest = _user.wallet.investList
+        .firstWhere((i) => i.currency.name == invest.currency.name);
+    print("silinecek bulundu" + willbeRemovedInvest.currency.name);
+    willbeRemovedInvest.currencyAmount -= invest.currencyAmount;
+    if (willbeRemovedInvest.currencyAmount < 0)
+      _user.wallet.investList
+          .removeWhere((i) => i.currency.name == invest.currency.name);
+
     notifyListeners();
   }
 

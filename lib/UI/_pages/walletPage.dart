@@ -122,7 +122,7 @@ class _WalletPageState extends State<WalletPage> {
                             ),
                             subtitle: Text(_groupedUserInvestList[index]
                                     .currencyAmount
-                                    .toString() +
+                                    .toStringAsFixed(3) +
                                 " " +
                                 _user.wallet.investList[index].currency.name),
                             trailing: Column(

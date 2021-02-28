@@ -1,8 +1,11 @@
 import 'package:currencygamestock/Data/moqData.dart';
 import 'package:currencygamestock/Domain/model/currency.dart';
 import 'package:currencygamestock/Domain/model/user.dart';
+import 'package:currencygamestock/Domain/model/userInvest.dart';
 import 'package:currencygamestock/Providers/currenciesProvider.dart';
 import 'package:currencygamestock/Providers/userProvider.dart';
+import 'package:currencygamestock/UI/_pages/currencyPage.dart';
+import 'package:currencygamestock/UI/_pages/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,15 +23,18 @@ class SellBuyPage extends StatefulWidget {
 
 class _SellBuyPageState extends State<SellBuyPage> {
   UserData _userData = null;
+  CurrenciesData _currenciesData = null;
   User _user = null;
   final sellController = TextEditingController();
   final buyController = TextEditingController();
   String buyText = "0.0";
   String sellText = "0.0";
+  bool willProcessContinue = false;
 
   @override
   Widget build(BuildContext context) {
     _userData = Provider.of<UserData>(context);
+    _currenciesData = Provider.of<CurrenciesData>(context);
     _user = _userData.getUser();
 
     print(sellText);
@@ -71,7 +77,7 @@ class _SellBuyPageState extends State<SellBuyPage> {
             Expanded(
                 child: Container(
                     margin: EdgeInsets.all(20),
-                    child: Text(currencyName + ": " + currencyPrice + "₺",
+                    child: Text(currencyName + ": " + currencyPrice + " ₺",
                         style: TextStyle(fontSize: 18))))
           ],
         ),
@@ -112,7 +118,9 @@ class _SellBuyPageState extends State<SellBuyPage> {
           ],
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            _setSellProcess(context);
+          },
           child: Container(
             width: 240,
             height: 60,
@@ -136,7 +144,7 @@ class _SellBuyPageState extends State<SellBuyPage> {
             Expanded(
                 child: Container(
                     margin: EdgeInsets.all(20),
-                    child: Text(currencyName + ": " + currencyPrice + "₺",
+                    child: Text(currencyName + ": " + currencyPrice + " ₺",
                         style: TextStyle(fontSize: 18))))
           ],
         ),
@@ -180,7 +188,9 @@ class _SellBuyPageState extends State<SellBuyPage> {
           ],
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            _setBuyProcess(context);
+          },
           child: Container(
             width: 240,
             height: 60,
@@ -194,6 +204,39 @@ class _SellBuyPageState extends State<SellBuyPage> {
         ),
       ],
     );
+  }
+
+  _setBuyProcess(BuildContext context) {
+    var currency = _currenciesData.getCurrecyByName(widget.currencyName);
+    var currencyAmount =
+        double.parse(buyController.text) / double.parse(widget.currencyPrice);
+    var invest =
+        new UserInvest(currency: currency, currencyAmount: currencyAmount);
+
+    // _showProcessDialog(
+    //     context,
+    //     "${currency.name}'den  $currencyAmount ₺ 'lik alım yapılacaktır. Onaylıyor musunuz?",
+    _addWallet(invest);
+    _showAlertDialog(
+        context, "İşlemi başarılı bir şekilde gerçekleşti.", Colors.green);
+  }
+
+  _addWallet(UserInvest invest) {
+    _userData.addUserWallet(invest);
+  }
+
+  _setSellProcess(BuildContext context) {
+    var currency = _currenciesData.getCurrecyByName(widget.currencyName);
+    var currencyAmount = double.parse(sellController.text);
+    var invest =
+        new UserInvest(currency: currency, currencyAmount: currencyAmount);
+    _removeWallet(invest);
+    _showAlertDialog(context, "Satım işlemi başarılı bir şekilde gerçekleşti.",
+        Colors.green);
+  }
+
+  _removeWallet(UserInvest invest) {
+    _userData.removeUserWallet(invest);
   }
 
   Widget _buildeBalanceContainer(double screenHeight) {
@@ -242,7 +285,7 @@ class _SellBuyPageState extends State<SellBuyPage> {
         _userData.getSpecificGroupedInvest(widget.currencyName).currencyAmount;
 
     if (enteredNumber > currentBalance) {
-      _showAlertDialog(context);
+      _showAlertDialog(context, "Bakiyeniz yetersiz.", Colors.red);
       sellController.text = currentBalance.toStringAsFixed(2);
     }
     setState(() {
@@ -257,7 +300,7 @@ class _SellBuyPageState extends State<SellBuyPage> {
     var currentBalance = _userData.remainedBalance;
 
     if (enteredNumber > currentBalance) {
-      _showAlertDialog(context);
+      _showAlertDialog(context, "Bakiyeniz yetersiz", Colors.red);
       buyController.text = currentBalance.toStringAsFixed(2);
     }
 
@@ -268,22 +311,51 @@ class _SellBuyPageState extends State<SellBuyPage> {
     });
   }
 
-  _showAlertDialog(BuildContext context) {
-    // set up the button
+  _showAlertDialog(BuildContext contex, String message, Color backgroundColor) {
     Widget okButton = FlatButton(
-      child: Text("OK"),
+      child: Text("Tamam"),
       onPressed: () {
-        Navigator.pop(context, false);
+        Navigator.pop(context);
       },
     );
 
-    // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Uyarı"),
-      content: Text("Bakiyeniz yetersiz"),
+      backgroundColor: backgroundColor,
+      title: Text(message),
       actions: [
         okButton,
       ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  _showProcessDialog(BuildContext contex, String message, VoidCallback func) {
+    Widget okButton = FlatButton(
+      child: Text("Tamam"),
+      onPressed: () {
+        func.call();
+        _showAlertDialog(
+            context, "İşlemi başarılı bir şekilde gerçekleşti.", Colors.green);
+      },
+    );
+
+    Widget cancelButton = FlatButton(
+      child: Text("İptal"),
+      onPressed: () {
+        _showAlertDialog(context, "İşlem iptal edildi", Colors.red);
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text(message),
+      actions: [okButton, cancelButton],
     );
 
     // show the dialog

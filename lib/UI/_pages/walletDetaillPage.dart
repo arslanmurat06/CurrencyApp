@@ -117,7 +117,7 @@ class _WalletDetailPageState extends State<WalletDetailPage> {
             _userInvest[index].currency.name,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          subtitle: Text(_userInvest[index].currencyAmount.toString() +
+          subtitle: Text(_userInvest[index].currencyAmount.toStringAsFixed(3) +
               " " +
               _userInvest[index].currency.name),
           trailing:
