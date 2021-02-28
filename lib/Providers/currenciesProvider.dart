@@ -16,7 +16,8 @@ class CurrenciesData extends ChangeNotifier {
   }
 
   Currency getCurrecyByName(String curencyName) {
-    return _currencies.firstWhere((c) => c.name == curencyName);
+    return _currencies.firstWhere((c) => c.name == curencyName,
+        orElse: () => null);
   }
 
   void updateCurrency(CurrencyStream stream) {

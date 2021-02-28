@@ -20,6 +20,7 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     _userData = Provider.of<UserData>(context);
     _user = _userData.getUser();
+    print("balanceee" + _user.balance.toString());
     _groupedUserInvestList = _userData.getGroupedInvest();
     var contHeight = MediaQuery.of(context).size.height;
     return Scaffold(

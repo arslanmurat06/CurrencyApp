@@ -52,6 +52,7 @@ class UserData extends ChangeNotifier {
   }
 
   double calculateRemainedBalance() {
+    print("burdaaa");
     remainedBalance = 0.0;
     remainedBalance = _user.balance - _getAllInvest();
     return remainedBalance;
@@ -77,13 +78,12 @@ class UserData extends ChangeNotifier {
   }
 
   UserInvest getSpecificGroupedInvest(String currencyName) {
-    var a =
-        _groupedUserInvest.firstWhere((i) => i.currency.name == currencyName);
-    print("totalInvest" +
-        a.totalInvest.toStringAsFixed(3) +
-        " adı:" +
-        a.currency.name);
-    return a;
+    var foundInvest = _groupedUserInvest
+        .firstWhere((i) => i.currency.name == currencyName, orElse: () => null);
+
+    if (foundInvest == null) return null;
+
+    return foundInvest;
   }
 
   _groupallInvest(String k, List<UserInvest> v, List<UserInvest> _investList) {

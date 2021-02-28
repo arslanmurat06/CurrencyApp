@@ -30,15 +30,17 @@ class _SellBuyPageState extends State<SellBuyPage> {
   String buyText = "0.0";
   String sellText = "0.0";
   bool willProcessContinue = false;
+  bool willBeAbsorbed = false;
 
   @override
   Widget build(BuildContext context) {
     _userData = Provider.of<UserData>(context);
     _currenciesData = Provider.of<CurrenciesData>(context);
     _user = _userData.getUser();
+    _userData.getGroupedInvest();
 
-    print(sellText);
-
+    willBeAbsorbed =
+        _userData.getSpecificGroupedInvest(widget.currencyName) == null;
     var contHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -70,69 +72,72 @@ class _SellBuyPageState extends State<SellBuyPage> {
   }
 
   Widget _buildSellWidget(String currencyName, String currencyPrice) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
+    return AbsorbPointer(
+      absorbing: willBeAbsorbed,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                  child: Container(
+                      margin: EdgeInsets.all(20),
+                      child: Text(currencyName + ": " + currencyPrice + " ₺",
+                          style: TextStyle(fontSize: 18))))
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
                 child: Container(
-                    margin: EdgeInsets.all(20),
-                    child: Text(currencyName + ": " + currencyPrice + " ₺",
-                        style: TextStyle(fontSize: 18))))
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.all(20),
-                child: TextField(
-                  onChanged: (text) {
-                    onSellTextChange(text, context);
-                  },
-                  controller: sellController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green)),
-                    labelText: 'Satılacak Adet',
+                  margin: EdgeInsets.all(20),
+                  child: TextField(
+                    onChanged: (text) {
+                      onSellTextChange(text, context);
+                    },
+                    controller: sellController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green)),
+                      labelText: 'Satılacak Adet',
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                height: 55,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white54),
-                    borderRadius: BorderRadius.all(Radius.circular(3))),
-                margin: EdgeInsets.all(20),
-                child: Text(sellText + " ₺", style: TextStyle(fontSize: 18)),
-              ),
-            )
-          ],
-        ),
-        GestureDetector(
-          onTap: () {
-            _setSellProcess(context);
-          },
-          child: Container(
-            width: 240,
-            height: 60,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.green,
-            ),
-            child: Text('Sat'),
+              )
+            ],
           ),
-        ),
-      ],
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 55,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white54),
+                      borderRadius: BorderRadius.all(Radius.circular(3))),
+                  margin: EdgeInsets.all(20),
+                  child: Text(sellText + " ₺", style: TextStyle(fontSize: 18)),
+                ),
+              )
+            ],
+          ),
+          GestureDetector(
+            onTap: () {
+              _setSellProcess(context);
+            },
+            child: Container(
+              width: 240,
+              height: 60,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.green,
+              ),
+              child: Text('Sat'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -258,25 +263,32 @@ class _SellBuyPageState extends State<SellBuyPage> {
                     children: [
                       Text("Kullanılabilir Bakiyeniz: ",
                           style: TextStyle(fontSize: 25)),
-                      Text(_userData.remainedBalance.toStringAsFixed(2) + " ₺",
+                      Text(
+                          _userData.getRemainedBalance.toStringAsFixed(2) +
+                              " ₺",
                           style: TextStyle(fontSize: 30)),
                     ],
                   )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("Toplam " + widget.currencyName + " Bakiyeniz",
-                          style: TextStyle(fontSize: 25)),
-                      Text(
-                          _userData
-                                  .getSpecificGroupedInvest(widget.currencyName)
-                                  .currencyAmount
-                                  .toStringAsFixed(2) +
-                              " " +
-                              widget.currencyName,
-                          style: TextStyle(fontSize: 30)),
-                    ],
-                  )));
+                : _userData.getSpecificGroupedInvest(widget.currencyName) !=
+                        null
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text("Toplam " + widget.currencyName + " Bakiyeniz",
+                              style: TextStyle(fontSize: 25)),
+                          Text(
+                              _userData
+                                      .getSpecificGroupedInvest(
+                                          widget.currencyName)
+                                      .currencyAmount
+                                      .toStringAsFixed(2) +
+                                  " " +
+                                  widget.currencyName,
+                              style: TextStyle(fontSize: 30)),
+                        ],
+                      )
+                    : Text("Henüz bakiyeniz bulunmamaktadır",
+                        style: TextStyle(fontSize: 15))));
   }
 
   onSellTextChange(String number, BuildContext context) {
